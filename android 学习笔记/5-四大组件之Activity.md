@@ -161,10 +161,10 @@
 ```
 android:launchMode="standard|singleTop|singleTask|singleInstance"
 ```
-- standard - 创建新的任务，符合栈的特点：先进后出
+- standard(标准) - 创建新的任务，符合栈的特点：先进后出
 
-- singleTop - 如果该任务在栈顶则不在创建新的任务
+- singleTop(栈顶复用) - 如果该任务在栈顶则不在创建新的任务
 
-- singTask - 如果该任务已创建则不会在创建，若不在栈顶这将上面的任务出栈直到自己为栈顶-页面资源比较大
+- singTask(栈内复用) - 如果该任务已创建则不会在创建，若不在栈顶这将上面的任务出栈直到自己为栈顶-页面资源比较大
 
-- singleInstance - 会单独创建一个任务栈,在调用该页面，不会新建而是提前到其他任务前面 - 有道取词、launcher
+- singleInstance(单实例模式) - 会单独创建一个任务栈,在调用该页面，不会新建而是提前到其他任务前面 - 有道取词、launcher
