@@ -60,15 +60,15 @@ class adapter extends OutUserInfo implements IUserInfo{
     Map userInfo = super.getUserInfo();
     //获取员工名称
     public String getName(){
-        return (String)userInfo.get("name");
+        return (String)super.getUserInfo().get("name");
     }
     //获取员工电话
     public String getPhone(){
-        return (String)userInfo.get("phone");
+        return (String)super.getUserInfo().get("phone");
     }
     //获取员工家庭地址
     public String getAddres(){
-        return (String)userInfo.get("adress");
+        return (String)super.getUserInfo().get("adress");
     }
 }
 
