@@ -2,11 +2,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class client{
+
+        public static int romanToInt(String s) {
+            Map<Character, Integer> toInt = new HashMap<Character, Integer>();
+            toInt.put('I', 1);
+            toInt.put('V', 5);
+            toInt.put('X', 10);
+            toInt.put('L', 50);
+            toInt.put('C', 100);
+            toInt.put('D', 500);
+            toInt.put('M', 1000);
+            int currentNum;
+            int num = 0;
+            int temp = 0;
+            for(int i=0;i<s.length();i++){
+               currentNum = toInt.get(s.charAt(i));
+               if(currentNum > temp){
+                   num = num - 2*temp + currentNum;
+               }else{
+                   num += currentNum;
+               }
+               temp = currentNum;
+            }
+           
+            return num;
+        }
+
     public static void main(String[] args) {
-        IUserInfo userInfo = new adapter();
-        System.out.println(userInfo.getName());
-        System.out.println(userInfo.getAddres());
-        System.out.println(userInfo.getPhone());
+        System.out.println("" + romanToInt("MCMXCIV"));
+        // IUserInfo userInfo = new adapter();
+        // System.out.println(userInfo.getName());
+        // System.out.println(userInfo.getAddres());
+        // System.out.println(userInfo.getPhone());
     }
 }
 

@@ -39,7 +39,7 @@ public class sort{
                     data[j + 1] = temp;
                 }
             }
-            // 改进：如果本趟未发送交换则代表已经拍好序
+            // 改进：如果本趟未发送交换则代表已经排好序
             if (!isExchange) {
                 break;
             }
@@ -47,40 +47,93 @@ public class sort{
         }
     }
 
+    // 分治算法思想->求无序数组中的中位数
+    static int findMiddle( int data[], int left, int right) {
+        int low = left,high = right;
+        int target = low;// 初始化指
+        int temp;
+        if (low < high){
+            // 如果低位小于高位表明，还未找到指标的准确位置
+            while (low < high) {
+                //分别在两端查找小于、大于target的位置
+                while (data[high] >= data[target] && low < high) high--;
+                while (data[low] <= data[target] && low < high)low++;
+                if(low < high){
+                    //交换高低位数据
+                    temp = data[low];
+                    data[low]= data[high];
+                    data[high] = temp;
+                }
+            }
+            //找到data[target]的位置
+            temp = data[low];
+            data[low] = data[target];
+            data[target] = temp;
+            
+        }
+        if(low == data.length/2){
+            return data[low];
+        }
+        else if(low < data.length/2){
+            return findMiddle(data, low+1, right);
+        }else{
+            return findMiddle(data, left, low-1);
+         }
+    }
+
     // 快速排序
     static void quickSort(final int data[], int left, int right) {
         int low = left,high = right;
-        if (low >= high)
-        return;
-        int target = data[low];// 初始化指
-        // 如果低位小于高位表明，还未找到指标的准确位置
-        while (low < high) {
-            while (data[high] >= target && low < high) high--;
-            if(low >= high){
-                break;
+        int target = low;// 初始化指
+        int temp;
+        if (low < high){
+            // 如果低位小于高位表明，还未找到指标的准确位置
+            while (low < high) {
+                //分别在两端查找小于、大于target的位置
+                while (data[high] >= data[target] && low < high) high--;
+                while (data[low] <= data[target] && low < high)low++;
+                if(low < high){
+                    //交换高低位数据
+                    temp = data[low];
+                    data[low]= data[high];
+                    data[high] = temp;
+                }
             }
-            // 交换位置
-            data[low] = data[high];
-            low++;
-            while (data[low] <= target && low < high)low++;
-            if(low >= high){
-                break;
+            //找到data[target]的位置
+            temp = data[low];
+            data[low] = data[target];
+            data[target] = temp;
+            quickSort(data, left, low-1);
+            quickSort(data, low+1, right);
+        } 
+    }
+
+    //直接插入排序
+    public static void InsertSort(int data[]){
+        int target;//记录当前待插入元素的值
+        //从第2个元开始向有序部分插入
+        for(int i=1;i<data.length;i++){
+            target = data[i];
+            for(int j = i-1; j>=0;j--){
+                if(data[j]>target){//若大于target则后移
+                    data[j+1] = data[j];
+                }else{
+                    data[j] = target;
+                    break;
+                }
+                if(j == 0){
+                    data[j] = target;
+                }
             }
-            // 交换位置
-            data[high] = data[low];
-            high--;
         }
-        //找到target的位置
-        data[low] = target;
-        quickSort(data, left, low-1);
-        quickSort(data, low+1, right);
     }
 
     public static void main(final String[] args) {
         final int size = 100;
         final int data[] = new int[size];
         initData(data);
-        quickSort(data, 0, data.length-1);
+        InsertSort(data);
+        // System.out.println("中位数==" + findMiddle(data, 0, data.length-1));
         printData(data);
     }
 }
