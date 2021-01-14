@@ -22,7 +22,7 @@
     * 空一行
     * 请求体
 - http响应格式
-    * 响应头
+    * 响应行
     * 响应头
     * 空一行
     * 向应体
@@ -33,7 +33,7 @@
     @Override
     public void run() {
         try {
-            URL url = new URL("https://www.sunofbeach.net/shop/api/discovery/categories");
+            URL url = new URL("http://localhost:9102/get/text");
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setConnectTimeout(10000);
             connection.setRequestMethod("GET");
@@ -52,7 +52,7 @@
             InputStream inputStream = connection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String lines = "";
-            while(bufferedReader.ready()){
+            while(bufferedReader.read()){
                 lines +=  bufferedReader.readLine();
             }
             Log.d(TAG, "content --> " +  bufferedReader.readLine());
@@ -63,6 +63,23 @@
     }
 }).start();
 ```
+
+- api27以后禁止访问明文http
+
+    * 处理办法：修改配置-> android:usesCleartextTraffic="true"
+    * 添加网络配置文件：android:networkSecurityConfig="@security_file.xml"
+    * @security_file.xml
+        ```xml
+            <?xml version="1.0" encoding="utf-8"?>
+            <network-security-config>
+                <domain-config>
+                    <domain includeSubdomains="true">sunofbeaches.com</domain>
+                    <domain-config cleartextTrafficPermitted="true">
+                        <domain includeSubdomains="true">www.sunofbeaches.com</domain>
+                    </domain-config>
+                </domain-config>
+            </network-security-config>
+        ```
 
 
 ## 使用java的api进行请求图片
@@ -102,3 +119,5 @@
 ```
 
 ## 加载大图片处理优化
+
+
