@@ -1,3 +1,106 @@
+# PagingDateAdapter绑定数据时如何获取数据的
+
+1. PagingDateAdapter
+```java
+ PagingDateAdapter.getItem(@IntRange(from = 0) position: Int) = differ.getItem(position)
+ //differ:AsyncPagingDataDiffer(Async:异步)
+```
+
+2. AsyncPagingDataDiffer
+```java
+    AsyncPagingDataDiffer.getItem(@IntRange(from = 0) index: Int): T?{ 
+        try {
+            inGetItem = true
+            return differBase[index]
+            //differBase:PagingDataDiffer<T> 运算符重载了get方法
+        } finally {
+            inGetItem = false
+        }
+    }
+```
+3. PagingDataDiffer<T>重载get()方法
+```java
+    lastAccessedIndexUnfulfilled = true
+    lastAccessedIndex = index
+    //检查当前获取数据在加载到本地数据集中的位置是否可以触发加载线上数据
+    //receiver来自于PageData,是否是在PageData的创建中创建的该对象
+    //todo:receiver的具体实现？question3
+    receiver?.accessHint(presenter.accessHintForPresenterIndex(index))
+    /**
+    *  fun accessHint(viewportHint: ViewportHint)
+    *
+    *   ViewportHint: 加载访问信息团，包含了presenter的信息
+    *       Initial:
+    *           [ViewportHint] reporting presenter state after receiving initial page.
+    *           ViewportHint报告presenter的状态之后接收初始页面(数据)
+    *           take precedence over 优先于
+    *           An [Initial] hint should never take precedence over an [Access] hint and is only used to inform
+    *           一个[Initial]提示永远不应该优先于一个[Access]提示并且只用于通知
+    *           [PageFetcher] how many items from the initial page load were presented by [PagingDataDiffer]
+    *           [PagingDataDiffer]显示了初始页面加载中的多少项
+    *       Access:
+    *           [ViewportHint] representing an item access that should be used to trigger loads to fulfil prefetch distance.
+    *           代表了一个item访问要达到触发加载的距离
+    *           
+    **/
+    //presenter: PagePresenter<T>
+    return presenter.get(index)
+```
+4. PagePresenter.get(index: Int): T?()
+```java
+//检查index的合法性
+ fun get(index: Int): T? {
+    checkIndex(index)
+    //placeholdersBefore 占位符之前的index
+    val localIndex = index - placeholdersBefore
+    //storageCount 存储数据的count
+    if (localIndex < 0 || localIndex >= storageCount) {
+        return null
+    }
+    return getFromStorage(localIndex)
+ }
+```
+5. PagePresenter.getFromStorage(index: Int): T?()
+
+```java
+override fun getFromStorage(localIndex: Int): T {
+    var pageIndex = 0
+    var indexInPage = localIndex
+
+    // Since we don't know if page sizes are regular, we walk to correct page.
+    // 因为我们不知到每个page的pageSize是否一样，所以需要从第0页开始遍历，直到当前的最后一个元素的index大于localIndex，便找到了该元素的页数，
+    // 而减去前面每页的PageSize后得到的就是该元素在本页数据的位置
+    val localPageCount = pages.size
+    while (pageIndex < localPageCount) {
+        val pageSize = pages[pageIndex].data.size
+        if (pageSize > indexInPage) {
+            // stop, found the page
+            break
+        }
+        indexInPage -= pageSize
+        pageIndex++
+    }
+    //通过pageIndex获取正确page,再通过indexInPage获取元素
+    return pages[pageIndex].data[indexInPage]
+    /**
+     * pages的结构：MutableList<TransformablePage<T>>
+     * 因此page.data就是：TransformablePage<T>
+     * TransformablePage<T : Any>{
+     *      val data: List<T>
+     *   }
+     * data中保存了本页的数据
+     **/
+}
+```
+
+- 总结：PagingDataAdpater中根据Item的Position通过AsyncPagingDataDiffer.getItem()获取数据，
+       AsyncPagingDataDiffer通过PagingDataDiffer的重载运算符get()获取数据，
+       PagingDataDiffer通过PagePresenter.get()获取数据
+       PagePresenter通过get()检查index的合法性然后再调用自己的getFromStorage()从pages列表中获取当前page:TransformablePage<T>
+       TransformablePage<T>中使用List<T>存储本页数据，即目标数据从这里返回
+       因此在Paging中请求来的数据最终保存在了PagePresenter中的pages中 ———— 以每页数据为一个List，保存在pages:MutableList中
+
+# PagingDateAdapter.submitData()如何保存到PagePresenter的pages中的
 1. 通过submitData提交数据
     1. PagingDataAdapter.submitData(PageData<T>())
     2. differ:AsyncPagingDataDiffer.submitData(PageData<T>())
@@ -192,4 +295,3 @@ if (transformedLastAccessedIndex == null) {
     )
 }
 ```
-
