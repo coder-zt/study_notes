@@ -1,3 +1,4 @@
+
 # PagingDateAdapter绑定数据时如何获取数据的
 
 1. PagingDateAdapter
@@ -172,6 +173,7 @@ collectFromRunner.runInIsolation {
     //blocking
 }
 
+
 - 因此上面的blocking就是一个job, blocking代码如下：
 
 ```java
@@ -183,6 +185,8 @@ collectFromRunner.runInIsolation {
             //blocking
         }
     }
+```
+
 ```java
     Flow.collect { event -> 
         //blocking
@@ -295,3 +299,67 @@ if (transformedLastAccessedIndex == null) {
     )
 }
 ```
+
+```java
+
+//differCallback：DifferCallback => updateCallback:ListUpdateCallback => AdapterListUpdateCallback => RecyclerView.Adapter
+override suspend fun presentNewList(
+            previousList: NullPaddedList<T>,
+            newList: NullPaddedList<T>,
+            lastAccessedIndex: Int,
+            onListPresentable: () -> Unit,
+        ) = when {
+            // fast path for no items -> some items
+            //旧数据为空是直接插入新数据
+            previousList.size == 0 -> {
+                onListPresentable()
+                differCallback.onInserted(0, newList.size)
+                null
+            }
+            // fast path for some items -> no items
+            //新数据为空是删除旧数据
+            newList.size == 0 -> {
+                onListPresentable()
+                differCallback.onRemoved(0, previousList.size)
+                null
+            }
+            else -> {
+                val diffResult = withContext(workerDispatcher) {
+                    previousList.computeDiff(newList, diffCallback)
+                }
+                onListPresentable()
+                previousList.dispatchDiff(updateCallback, newList, diffResult)
+                previousList.transformAnchorIndex(
+                    diffResult = diffResult,
+                    newList = newList,
+                    oldPosition = lastAccessedIndex
+                )
+            }
+        }
+```
+
+
+```mermaid
+graph TD;
+    class1["Pager(config,pagingSourceFactory)"] -- flow = --> class2["PagerFetchaer(pagingSourceFactory,config )"]-- flow = ---> fun["internal fun <T> simpleChannelFlow(block: suspend SimpleProducerScope<T>.() -> Unit)"];
+    Note("note:block是一个拓展方法") ---> fun;
+    fun ---> flow("public fun <T> flow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<T> = SafeFlow(block)") ---> buffer("buffer(Channel.BUFFERED)")
+```
+
+#### simpleChannelFlow()
+
+
+cat /etc/apt/sources.list << EOF
+deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu xenial-security main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu xenial-security main restricted universe multiverse
+#deb http://archive.ubuntu.com/ubuntu xenial-proposed restricted main universe multiverse
+#deb-src http://archive.ubuntu.com/ubuntu xenial-proposed restricted main universe multiverse
+deb http://archive.canonical.com/ubuntu xenial partner
+deb-src http://archive.canonical.com/ubuntu xenial partner
+EOF
