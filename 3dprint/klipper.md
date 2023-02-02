@@ -40,9 +40,9 @@
     /home/klipper/klippy-env/bin/python /home/klipper/klipper/klippy/klippy.py /home/klipper/klipper_config/printer.cfg -I /tmp/printer -l /home/klipper/klipper_logs/klippy.log -a /tmp/klippy_uds&
     /home/klipper/moonraker-env/bin/python /home/klipper/moonraker/moonraker/moonraker.py -l /home/klipper/klipper_logs/moonraker.log -c /home/klipper/klipper_config/moonraker.conf
 
-/etc/init.d/nginx start
-/home/klipper/klippy-env/bin/python /home/klipper/klipper/klippy/klippy.py /home/klipper/printer_data/config/printer.cfg -I /home/klipper/printer_data/comms/klippy.serial -l /home/klipper/printer_data/logs/klippy.log -a /home/klipper/printer_data/comms/klippy.sock&
-/home/klipper/moonraker-env/bin/python /home/klipper/moonraker/moonraker/moonraker.py -l /home/klipper/printer_data/logs/moonraker.log -c /home/klipper/printer_data/config/moonraker.conf
+    /etc/init.d/nginx start
+    /home/klipper/klippy-env/bin/python /home/klipper/klipper/klippy/klippy.py /home/klipper/printer_data/config/printer.cfg -I /home/klipper/printer_data/comms/klippy.serial -l /home/klipper/printer_data/logs/klippy.log -a /home/klipper/printer_data/comms/klippy.sock&
+    /home/klipper/moonraker-env/bin/python /home/klipper/moonraker/moonraker/moonraker.py -l /home/klipper/printer_data/logs/moonraker.log -c /home/klipper/printer_data/config/moonraker.conf
     ```
 
 17. 将startklipper.sh转变为可执行的文件：sudo chmod +x ./startklipper.sh

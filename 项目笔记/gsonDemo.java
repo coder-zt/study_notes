@@ -9,7 +9,7 @@ import java.security.PublicKey;
 /**
  * @author xietansheng
  */
-public class Main {
+public class gsonDemo {
 
     public static void main(String[] args) throws Exception {
         // 随机生成一对密钥（包含公钥和私钥）

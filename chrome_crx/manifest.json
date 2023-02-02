@@ -1,0 +1,26 @@
+{
+    "name": "Learn Demo",
+    "description": "Base Level Extension",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_icon": {
+            "16": "img/16.png",
+            "24": "img/24.png",
+            "32": "img/32.png"
+        },
+        "default_title": "Click to show an alert"
+    },
+    "host_permissions": [
+        "<all_urls>"
+      ],
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "tabs",
+        "webRequest"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    }
+}
