@@ -1,7 +1,3 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-import pyautogui
-import time
 from WebDriver import FetchArticleDirver
 from Mouser import Mouser
 

@@ -5,7 +5,7 @@
 2. 打开Termux执行命令：
     1. 更新：pkg update
     2. 安装ssh: pkg install openssh
-    3. 在电脑控制台连接手机：ssh -p 8022 u0_a130@192.168.8.112
+    3. 在电脑控制台连接手机：ssh -p 8022 u0_a127@192.168.0.6 \\debain ssh -p 22 root@192.168.8.122
         1. 查看用户：whoami
         2. 查看IP：ifconfig
 3. 安装debian系统
@@ -16,7 +16,7 @@
     4. 对应的行修改为：wget https://ghproxy.com/https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Scripts/Installer/Debian/debian.sh
     5. bash debian.sh
     6. ./debian.sh
-    6. apt update
+    6.
     6. apt install nginx
     7. logout
 4. pkg install tsu //获取sudo
@@ -101,7 +101,8 @@
 
     1. 源的问题，需要新增一个新的源
     2. 修改源文件
-        2.1 vim /etc/apt/sources.list #修改源文件
+        2.1 
+         #修改源文件
         2.2 deb http://cz.archive.ubuntu.com/ubuntu focal main universe # 添加新源，添加到新的一行
     3. 更新数据
         3.1 sudo apt-get update
