@@ -16,3 +16,5 @@
     - Cgs:Rdson与 Cgs成反比，影响mos打开速度，过大会使pwm失真
 
 ### nmos与pmos的区别
+
+![nmos](./img/pmos与nmos的比较.png "")
