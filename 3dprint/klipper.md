@@ -152,3 +152,7 @@ PATH="/home/username/toolchains/aarch64-linux-android-4.9/bin:/home/username/too
 
 
 
+nmcli d wifi connect 烤鸭别鸡冻 password dixin305
+
+
+nohup ./frpc -c frpc.toml >/dev/null 2>&1 &
