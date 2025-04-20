@@ -1,0 +1,6 @@
+path: /Users/edy/owner/study_notes/python/djangotutorial/frist/res/dataset
+train: train/images
+val: val/images
+
+nc: 1
+names: ['1']
