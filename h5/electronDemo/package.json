@@ -1,0 +1,18 @@
+{
+  "name": "electrondemo",
+  "version": "1.0.0",
+  "description": "demo",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zhangtao",
+  "license": "ISC",
+  "dependencies": {
+    "electrondemo": "file:"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
