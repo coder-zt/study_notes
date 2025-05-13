@@ -1,51 +1,66 @@
 <template>
-  <div id="app">
-    <img class="mx-auto w-48  h-auto" alt="Vue logo" :src=imgPath>
-    <el-upload class="upload-demo" action="" :on-preview="handlePreview"
-      :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed"
-      :file-list="fileList">
-      <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-    </el-upload>
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div id="app" class="flex h-screen bg-">
+    <div class="w-1/4 h-ful bg-purple-400">
+      <img
+        src="./assets/ic_launcher.png"
+        alt="app logo"
+        class="w-24 h-24 mx-auto mt-12 mb-2 border border-white rounded-lg"
+      />
+      <span class="text-black text-lg font-semibold">53伴学</span>
+      <br />
+      <span class="text-black text-lg font-semibold mt-2"
+        >发布工具@1.0.0-beta</span
+      >
+    </div>
+
+    <div class="w-3/4 h-full flex flex-col">
+      <nav>
+        <ul
+          class="flex flex-row justify-between space-x-12 items-center py-3 px-2"
+        >
+          <li
+            v-for="item in items"
+            :key="item.id"
+            :class="{
+              'bg-purple-500 rounded-full': item.selected,
+            }"
+            class="w-full py-2 text-black text-lg font-semibold"
+            @click="handleClick(item)"
+          >
+            {{ item.name }}
+          </li>
+        </ul>
+      </nav>
+      <router-view class="w-full h-full bg-gray-100"> </router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
   },
   data() {
     return {
-      imgPath:'file:///C:\\Users\\69107\\Pictures\\Camera Roll\\644699570E1EC9E9274132A20FFC7C9D.jpg',
-      fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+      items: [
+        { name: "通用", selected: true, router: "/" },
+        { name: "华为", selected: false, router: "/huawei" },
+        { name: "Oppo", selected: false, router: "/oppo" },
+        { name: "小米", selected: false, router: "/xiaomi" },
+        { name: "Vivo", selected: false, router: "/vivo" },
+      ],
     };
   },
   methods: {
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleClick(item) {
+      if(item.selected) return;
+      this.items.forEach((i) => (i.selected = false));
+      item.selected = true;
+      this.$router.push(item.router);
     },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleExceed(files, fileList) {
-      console.log(this.imgPath)
-      console.log(files)
-      console.log(fileList)
-      const path = 'C:\\Users\\69107\\Pictures\\Camera Roll\\644699570E1EC9E9274132A20FFC7C9D.jpg'
-      this.imgPath = path
-      console.log(this.imgPath)
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file) {
-      return this.$confirm(`确定移除 ${file.name}？`);
-    }
-  }
-}
+  },
+};
 </script>
 
 <style>
@@ -55,6 +70,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

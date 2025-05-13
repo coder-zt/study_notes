@@ -1,24 +1,24 @@
 from ultralytics import YOLO
 
 
-# model = YOLO("/Users/edy/owner/study_notes/python/djangotutorial/frist/res/yolo11n.pt")
+model = YOLO("/Users/edy/owner/study_notes/python/djangotutorial/frist/res/yolo11n.pt")
 
 
-# results = model.train(data="/Users/edy/owner/study_notes/python/djangotutorial/frist/res/data.yaml", epochs=50, imgsz=128)
+results = model.train(data="/Users/edy/owner/study_notes/python/djangotutorial/frist/res/data.yaml", epochs=50, imgsz=288)
 
-import predict
-import os
+# import predict
+# import os
 
-if __name__ == "__main__":
-    path = "/Users/edy/owner/study_notes/python/djangotutorial/frist/res/test"
-    count = 0
-    right = 0
-    for i in os.listdir(path):
-        if not i.endswith("png"):
-            continue
-        count = count + 1
-        print(f"{path}/{i}")
-        answer = predict.predictLocal(f"{path}/{i}")
+# if __name__ == "__main__":
+#     path = "/Users/edy/owner/study_notes/python/djangotutorial/frist/res/test"
+#     count = 0
+#     right = 0
+#     for i in os.listdir(path):
+#         if not i.endswith("png"):
+#             continue
+#         count = count + 1
+#         print(f"{path}/{i}")
+#         answer = predict.predictLocal(f"{path}/{i}")
 #         TrueAnswer = i.split("_")[-1].split(".")[0]
 #         # print(answer)
 #         # print(TrueAnswer == str(answer))
@@ -33,20 +33,22 @@ if __name__ == "__main__":
 # 根据dataset目录下的标签文件复制docker/files/下的文件到dataset中
 # import os
 
-# path = "/Users/edy/owner/study_notes/python/djangotutorial/frist/res/dataset"
-# docker目录下存放文件的目录
-# sourcePath = "/Users/edy/owner/docker/files/train1"
-# 放入val还是train
-# labelsPath = f"{path}/val/labels"
+def movePictureToDataset(dataType, sourceDirName, picType):
+    # dataset目录下存放文件的目录
+    path = "/Users/edy/owner/study_notes/python/djangotutorial/frist/res/dataset"
+    # docker目录下存放文件的目录
+    sourcePath = f"/Users/edy/owner/docker/files/{sourceDirName}"
+    # 放入val还是train
+    labelsPath = f"{path}/{dataType}/labels"
 
-# for i in os.listdir(labelsPath):
-#     # print(f"{labelsPath}/{i}")
-#     name = i.split(".")[0]
-#     # print(f"{sourcePath}/{name}.jpg")
-#     # print(f"{path}/train/images/{name}.jpg")
-#     os.system(f"cp {sourcePath}/{name}.png {path}/val/images/{name}.png")
+    for i in os.listdir(labelsPath):
+        print(f"{labelsPath}/{i}")
+        name = i.split(".")[0]
+        os.system(f"cp {sourcePath}/{name}{picType} {path}/{dataType}/images/{name}{picType}")
 
 
+# movePictureToDataset("val", "train_xkw", ".png")
+# movePictureToDataset("train", "train_xkw", ".png")
 # import os
 
 # # path = "/Users/edy/owner/study_notes/python/djangotutorial/frist/res/dataset"
