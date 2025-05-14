@@ -28,7 +28,7 @@ def load_data():
     这种数据格式很好，但在神经网络中，对 training_data 的格式进行微调很有用。这通过封装函数
     load_data_wrapper()完成，参见下面的代码。
     """
-    f = gzip.open(f"{basePath}/mnist.pkl.gz", "rb")
+    f = gzip.open(f"{basePath}/../dataset/mnist.pkl.gz", "rb")
     training_data, validation_data, test_data = pickle.load(f, encoding="latin1")
     f.close()
     return (training_data, validation_data, test_data)
