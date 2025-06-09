@@ -130,6 +130,7 @@ class NetWork(object):
         ]
 
     # 反向传播计算权重
+    # 计算过程由四个基本方程推导而来
     def backprop(self, x, y):
         """
         返回一个表示代价函数 C_x 梯度的元组(nabla_b, nabla_w)。nabla_b 和 nabla_w 是一层接一层的
@@ -185,7 +186,7 @@ def sigmoid(z):
 
 # 激活函数(sigmoid)的导函数
 def sigmoid_prime(z):
-    return sigmoid(z) * (1 - sigmoid(z))
+    return sigmoid(z) * (1-sigmoid(z))
 
 
 if __name__ == "__main__":
