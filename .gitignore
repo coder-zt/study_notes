@@ -1,2 +1,6 @@
 h5/node_modules/
 **/node_modules
+python/djangotutorial/frist/res/secDataset/
+*.pth
+*.h5
+*.pyc
