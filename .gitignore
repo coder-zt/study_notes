@@ -4,3 +4,5 @@ python/djangotutorial/frist/res/secDataset/
 *.pth
 *.h5
 *.pyc
+python/pytorch入门/dataset/MNIST/raw/*.gz
+python/pytorch入门/dataset/MNIST/raw/*
